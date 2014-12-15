@@ -1,0 +1,10 @@
+{
+	const int myint = 3;
+	int myint2 = 4;
+	ivec3 myivec3;
+	bvec3 mybvec3 = bvec3(true, true, true);
+
+	myivec3 = ivec3(3, 4, 5);
+
+	myivec3[2] = myint2^4;
+}

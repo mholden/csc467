@@ -1,0 +1,51 @@
+!!ARBfp1.0
+PARAM	zero_reg = 0.0;
+PARAM	true_reg = 1.0;
+PARAM	false_reg = -1.0;
+TEMP	fCol;
+MOV	fCol, fragment.color;
+TEMP	fTex;
+MOV	fTex, fragment.texcoord;
+TEMP	eyeNorm;
+TEMP	coeff;
+TEMP	shade;
+PARAM	lVec = program.env[1];
+PARAM	lHalf = state.light[0].half;
+PARAM	red = 0.000000;
+MOV	eyeNorm, fTex;
+# function call:
+TEMP	tempVar0;
+DP3	tempVar0, eyeNorm, eyeNorm;
+MOV	eyeNorm.w, tempVar0;
+# function call:
+RSQ	tempVar0, eyeNorm.w;
+MOV	eyeNorm.w, tempVar0;
+# binary *:
+MUL	tempVar0, eyeNorm, eyeNorm.w;
+MOV	eyeNorm, tempVar0;
+# binary *:
+MUL	tempVar0, state.lightmodel.ambient, fCol;
+MOV	shade, tempVar0;
+# function call:
+DP3	tempVar0, lVec, eyeNorm;
+MOV	coeff.x, tempVar0;
+# function call:
+DP3	tempVar0, lHalf, eyeNorm;
+MOV	coeff.y, tempVar0;
+MOV	coeff.w, state.material.shininess.x;
+# function call:
+LIT	tempVar0, coeff;
+MOV	coeff, tempVar0;
+# binary *:
+MUL	tempVar0, coeff.y, fCol;
+TEMP	tempVar1;
+# binary +:
+ADD	tempVar1, shade, tempVar0;
+MOV	shade, tempVar1;
+# binary *:
+MUL	tempVar0, coeff.z, fCol;
+# binary +:
+ADD	tempVar1, shade, tempVar0;
+MOV	shade, tempVar1;
+MOV	result.color, shade;
+END
